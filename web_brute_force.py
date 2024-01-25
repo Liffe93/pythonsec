@@ -22,4 +22,6 @@ for username in usernames:
       sys.stdout.flush()
       sys.stdout.write("\n")
       sys.stdout.write("\t No password found for '{}'".format(username)) 
+      sys.stdout.write("\n")
+
         
